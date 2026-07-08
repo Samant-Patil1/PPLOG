@@ -156,7 +156,7 @@ Kimi can be connected to the following tools via scripts or APIs inside the `too
 
 ## 10. Version control and GitHub strategy
 
-Repository: `github.com/<user>/PPLOG` (to be created).
+Repository: `https://github.com/Samant-Patil1/PPLOG`.
 
 ### Branch model (Git Flow style)
 - **`main`**: Production-ready releases only. Protected — no direct pushes.

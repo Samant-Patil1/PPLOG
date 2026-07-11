@@ -84,7 +84,7 @@ fun ExerciseListItem(
 }
 
 @Composable
-private fun Badge(text: String, muted: Boolean = false) {
+internal fun Badge(text: String, muted: Boolean = false) {
     val bg = if (muted) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer
     val fg = if (muted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary
     Text(

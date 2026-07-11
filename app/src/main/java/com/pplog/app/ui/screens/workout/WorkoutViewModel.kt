@@ -31,8 +31,4 @@ class WorkoutViewModel(planRepository: PlanRepository) : ViewModel() {
         }
         _completedSets.value = current + (exerciseId to updatedSets)
     }
-
-    fun isSetCompleted(exerciseId: String, setNumber: Int): Boolean {
-        return _completedSets.value[exerciseId]?.contains(setNumber) ?: false
-    }
 }

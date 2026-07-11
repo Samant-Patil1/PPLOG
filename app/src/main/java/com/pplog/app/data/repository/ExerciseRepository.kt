@@ -1,7 +1,12 @@
 package com.pplog.app.data.repository
 
+import android.content.Context
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.pplog.app.data.local.dao.ExerciseDao
 import com.pplog.app.data.local.entity.ExerciseEntity
+import com.pplog.app.data.remote.ImageDownloadWorker
 import com.pplog.app.domain.model.Difficulty
 import com.pplog.app.domain.model.Equipment
 import com.pplog.app.domain.model.Exercise
@@ -9,7 +14,10 @@ import com.pplog.app.domain.model.MuscleGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ExerciseRepository(private val exerciseDao: ExerciseDao) {
+class ExerciseRepository(
+    private val exerciseDao: ExerciseDao,
+    private val context: Context
+) {
 
     fun getAllExercises(): Flow<List<Exercise>> = exerciseDao.getAll().map { list ->
         list.map { it.toDomain() }
@@ -25,6 +33,17 @@ class ExerciseRepository(private val exerciseDao: ExerciseDao) {
 
     fun getExercisesByDifficulty(difficulty: Difficulty): Flow<List<Exercise>> =
         exerciseDao.getByDifficulty(difficulty).map { list -> list.map { it.toDomain() } }
+
+    fun requestImageDownload(exerciseId: String, imagePath: String) {
+        val inputData = Data.Builder()
+            .putString(ImageDownloadWorker.KEY_EXERCISE_ID, exerciseId)
+            .putString(ImageDownloadWorker.KEY_IMAGE_PATH, imagePath)
+            .build()
+        val workRequest = OneTimeWorkRequestBuilder<ImageDownloadWorker>()
+            .setInputData(inputData)
+            .build()
+        WorkManager.getInstance(context).enqueue(workRequest)
+    }
 
     private fun ExerciseEntity.toDomain(): Exercise = Exercise(
         id = id,

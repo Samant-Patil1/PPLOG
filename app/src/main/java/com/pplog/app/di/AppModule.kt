@@ -27,7 +27,7 @@ val appModule = module {
     single { get<PPLOGDatabase>().planDao() }
     single { get<PPLOGDatabase>().workoutLogDao() }
 
-    single { ExerciseRepository(get()) }
+    single { ExerciseRepository(get(), androidApplication()) }
     single { PlanRepository(get()) }
     single { SettingsRepository(androidApplication()) }
 

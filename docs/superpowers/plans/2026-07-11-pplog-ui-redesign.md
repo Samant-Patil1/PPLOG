@@ -525,18 +525,7 @@ class MainActivity : ComponentActivity() {
 
 In `HomeScreen.kt`, delete the `bottomBar = { BottomAppBar { ... } }` block from the `Scaffold` call. Leave the rest of the file as-is for now (it will be redesigned in Task 8).
 
-In `PPLOGNavHost.kt`, remove the `ExerciseDetail` route:
-
-```kotlin
-// Remove these lines:
-// data object ExerciseDetail : Screen("exercise_detail/{exerciseId}")
-// composable(Screen.ExerciseDetail.route) { backStackEntry ->
-//     val exerciseId = backStackEntry.arguments?.getString("exerciseId") ?: ""
-//     ExerciseDetailScreen(exerciseId, navController)
-// }
-```
-
-Also remove the import for `ExerciseDetailScreen`.
+Leave `PPLOGNavHost.kt` unchanged in this task. The `ExerciseDetail` route will be removed in Task 11 once the bottom-sheet popup replaces it; removing it now would crash `ExploreScreen` because it still navigates to that route.
 
 - [ ] **Step 3: Compile**
 
@@ -546,12 +535,12 @@ Run:
 ./gradlew :app:compileDebugKotlin
 ```
 
-Expected: BUILD SUCCESSFUL (may show unused import warnings until screens are updated).
+Expected: BUILD SUCCESSFUL.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add app/src/main/java/com/pplog/app/MainActivity.kt app/src/main/java/com/pplog/app/ui/navigation/PPLOGNavHost.kt app/src/main/java/com/pplog/app/ui/screens/home/HomeScreen.kt
+git add app/src/main/java/com/pplog/app/MainActivity.kt app/src/main/java/com/pplog/app/ui/screens/home/HomeScreen.kt
 git commit -m "feat: move bottom navigation into MainActivity scaffold"
 ```
 

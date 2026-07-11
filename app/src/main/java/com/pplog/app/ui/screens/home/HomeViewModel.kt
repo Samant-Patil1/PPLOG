@@ -12,7 +12,13 @@ import kotlinx.coroutines.flow.stateIn
 class HomeViewModel(planRepository: PlanRepository) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = planRepository.getActivePlan()
-        .map { plan -> HomeUiState(activePlan = plan) }
+        .map { plan ->
+            HomeUiState(
+                activePlan = plan,
+                workoutsThisWeek = 0,
+                currentStreakDays = 0
+            )
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -20,6 +26,8 @@ class HomeViewModel(planRepository: PlanRepository) : ViewModel() {
         )
 
     data class HomeUiState(
-        val activePlan: WorkoutPlan? = null
+        val activePlan: WorkoutPlan? = null,
+        val workoutsThisWeek: Int = 0,
+        val currentStreakDays: Int = 0
     )
 }

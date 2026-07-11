@@ -108,7 +108,6 @@ import androidx.compose.ui.graphics.Color
 
 val Background = Color(0xFF0F1419)
 val Surface = Color(0xFF1A1F25)
-val SurfaceBorder = Color(0xFF2A3038)
 val Primary = Color(0xFF4ADE80)
 val PrimaryContainer = Color(0xFF166534)
 val OnPrimary = Color(0xFF052E16)

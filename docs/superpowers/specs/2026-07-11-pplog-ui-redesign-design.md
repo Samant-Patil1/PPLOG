@@ -124,7 +124,7 @@ Selected tab uses primary color and filled icon; unselected uses muted color and
 ### 5.2 Theme Updates
 
 - Extend `Color.kt` with new palette tokens.
-- Update `Theme.kt` with custom dark scheme; keep light scheme minimal or derive from dark.
+- Update `Theme.kt` with a custom dark scheme; the app always uses the dark athletic color scheme.
 - Update `Type.kt` with the full Material 3 type scale.
 
 ---

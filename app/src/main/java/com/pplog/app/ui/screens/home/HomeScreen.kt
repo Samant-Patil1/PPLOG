@@ -3,13 +3,6 @@ package com.pplog.app.ui.screens.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,19 +24,6 @@ fun HomeScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar {
-                IconButton(onClick = { navController.navigate(Screen.Explore.route) }) {
-                    Icon(Icons.Default.Search, contentDescription = "Explore")
-                }
-                IconButton(onClick = { navController.navigate(Screen.Plan.route) }) {
-                    Icon(Icons.Default.AccountCircle, contentDescription = "Plan")
-                }
-                IconButton(onClick = { navController.navigate(Screen.Settings.route) }) {
-                    Icon(Icons.Default.Settings, contentDescription = "Settings")
-                }
-            }
-        }
     ) { padding ->
         Column(
             modifier = Modifier

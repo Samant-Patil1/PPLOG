@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pplog.app.ui.screens.explore.ExerciseDetailScreen
 import com.pplog.app.ui.screens.explore.ExploreScreen
 import com.pplog.app.ui.screens.home.HomeScreen
 import com.pplog.app.ui.screens.onboarding.OnboardingScreen
@@ -18,7 +17,6 @@ sealed class Screen(val route: String) {
     data object Onboarding : Screen("onboarding")
     data object Home : Screen("home")
     data object Explore : Screen("explore")
-    data object ExerciseDetail : Screen("exercise_detail/{exerciseId}")
     data object Plan : Screen("plan")
     data object PlanBuilder : Screen("plan_builder")
     data object Workout : Screen("workout")
@@ -43,10 +41,6 @@ fun PPLOGNavHost(
         }
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Explore.route) { ExploreScreen(navController) }
-        composable(Screen.ExerciseDetail.route) { backStackEntry ->
-            val exerciseId = backStackEntry.arguments?.getString("exerciseId") ?: ""
-            ExerciseDetailScreen(exerciseId, navController)
-        }
         composable(Screen.Plan.route) { PlanScreen(navController) }
         composable(Screen.PlanBuilder.route) { PlanBuilderScreen(navController) }
         composable(Screen.Workout.route) { WorkoutScreen(navController) }

@@ -92,7 +92,7 @@ Selected tab uses primary color and filled icon; unselected uses muted color and
 1. **Hero** — exercise image/video thumbnail with rounded top corners and gradient scrim.
 2. **Header** — exercise name, difficulty badge, muscle target chips, equipment chips.
 3. **Steps & Procedure** — numbered, checkable steps from `Exercise.instructions`.
-4. **Form Tips** — bullet list for optimum form and effectiveness (new field `formTips`).
+4. **Form Tips** — bullet list for optimum form and effectiveness (maps to existing `Exercise.tips`).
 5. **Actions** — "Download media", "Add to today's workout", "Close".
 
 ### 4.3 Behavior
@@ -134,7 +134,7 @@ Selected tab uses primary color and filled icon; unselected uses muted color and
 
 - UI state continues to flow through existing ViewModels (`HomeViewModel`, `ExploreViewModel`, `PlanViewModel`, `WorkoutViewModel`).
 - The popup receives an `exerciseId` and fetches the exercise via `ExerciseRepository.getExercise(id)`.
-- New `formTips` field added to `Exercise` domain model, entity, and seed data.
+- Existing `Exercise.tips` field powers the Form Tips section.
 - Offline-first: all exercise content ships with the app via `SeedDatabaseWorker`.
 
 ---

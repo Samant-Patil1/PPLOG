@@ -20,7 +20,6 @@ Modernize the PPLOG Android app UI and replace the full-screen exercise detail d
 |-------|-----|-------|
 | Background | `#0F1419` | Screen background |
 | Surface | `#1A1F25` | Cards, sheets, dialogs |
-| Surface Border | `#2A3038` | Subtle card borders |
 | Primary | `#4ADE80` | CTAs, active nav, success states |
 | Secondary | `#FB923C` | Highlights, streaks, warnings |
 | Error | `#F87171` | Errors |

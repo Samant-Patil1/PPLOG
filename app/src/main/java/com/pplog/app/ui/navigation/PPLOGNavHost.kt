@@ -43,7 +43,7 @@ fun PPLOGNavHost(
         composable(Screen.Explore.route) { ExploreScreen(navController) }
         composable(Screen.Plan.route) { PlanScreen(navController) }
         composable(Screen.PlanBuilder.route) { PlanBuilderScreen(navController) }
-        composable(Screen.Workout.route) { WorkoutScreen(navController) }
+        composable(Screen.Workout.route) { WorkoutScreen() }
         composable(Screen.Settings.route) { SettingsScreen(navController) }
     }
 }

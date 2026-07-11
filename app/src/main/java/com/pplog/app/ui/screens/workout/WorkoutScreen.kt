@@ -31,6 +31,7 @@ fun WorkoutScreen(
     viewModel: WorkoutViewModel = koinViewModel()
 ) {
     val plan by viewModel.activePlan.collectAsState()
+    val completedSets by viewModel.completedSets.collectAsState()
     var selectedExerciseId by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
@@ -57,7 +58,7 @@ fun WorkoutScreen(
                 day.exercises.forEach { exercise ->
                     WorkoutSetCard(
                         exercise = exercise,
-                        completedSets = (1..exercise.sets).filter { viewModel.isSetCompleted(exercise.exerciseId, it) }.toSet(),
+                        completedSets = completedSets[exercise.exerciseId] ?: emptySet(),
                         onToggleSet = { viewModel.toggleSet(exercise.exerciseId, it) },
                         onExerciseClick = { selectedExerciseId = exercise.exerciseId }
                     )

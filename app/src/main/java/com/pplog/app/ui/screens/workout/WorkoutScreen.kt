@@ -1,18 +1,12 @@
 package com.pplog.app.ui.screens.workout
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,69 +14,65 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import com.pplog.app.ui.components.ExerciseDetailBottomSheet
+import com.pplog.app.ui.components.WorkoutSetCard
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutScreen(
-    navController: NavController,
     viewModel: WorkoutViewModel = koinViewModel()
 ) {
     val plan by viewModel.activePlan.collectAsState()
+    val completedSets by viewModel.completedSets.collectAsState()
+    var selectedExerciseId by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Workout") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
+                title = { Text("Workout") }
             )
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(padding)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             plan?.days?.firstOrNull()?.let { day ->
                 Text(
                     text = "Day ${day.dayNumber}: ${day.focus}",
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 day.exercises.forEach { exercise ->
-                    Text(
-                        text = exercise.exerciseName,
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(top = 8.dp)
+                    WorkoutSetCard(
+                        exercise = exercise,
+                        completedSets = completedSets[exercise.exerciseId] ?: emptySet(),
+                        onToggleSet = { viewModel.toggleSet(exercise.exerciseId, it) },
+                        onExerciseClick = { selectedExerciseId = exercise.exerciseId }
                     )
-                    Text(
-                        text = "${exercise.sets} sets x ${exercise.reps} reps | Rest ${exercise.restSeconds}s",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    (1..exercise.sets).forEach { setNumber ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Checkbox(
-                                checked = viewModel.isSetCompleted(exercise.exerciseId, setNumber),
-                                onCheckedChange = { viewModel.toggleSet(exercise.exerciseId, setNumber) }
-                            )
-                            Text("Set $setNumber")
-                        }
-                    }
                 }
-            } ?: Text("No workout available.")
+            } ?: Text(
+                text = "No workout available. Build a plan first.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
+    }
+
+    selectedExerciseId?.let { id ->
+        ExerciseDetailBottomSheet(
+            exerciseId = id,
+            onDismiss = { selectedExerciseId = null }
+        )
     }
 }

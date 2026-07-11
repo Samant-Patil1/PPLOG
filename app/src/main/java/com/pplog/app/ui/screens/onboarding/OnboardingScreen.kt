@@ -1,6 +1,9 @@
 package com.pplog.app.ui.screens.onboarding
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,10 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.pplog.app.domain.model.Equipment
 import com.pplog.app.domain.model.Experience
 import com.pplog.app.domain.model.Goal
+import com.pplog.app.ui.components.HeroCard
 import com.pplog.app.ui.components.PrimaryButton
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun OnboardingScreen(
     onPlanCreated: () -> Unit,
@@ -43,12 +47,12 @@ fun OnboardingScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "Let's build your plan",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 24.dp)
+        HeroCard(
+            title = "Let's build your plan",
+            subtitle = "Tell us a bit about your goals and equipment."
         )
 
         Text("Primary goal", style = MaterialTheme.typography.labelLarge)
@@ -83,8 +87,7 @@ fun OnboardingScreen(
 
         Text(
             "Experience",
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(top = 16.dp)
+            style = MaterialTheme.typography.labelLarge
         )
         ExposedDropdownMenuBox(
             expanded = experienceExpanded,
@@ -117,32 +120,32 @@ fun OnboardingScreen(
 
         Text(
             "Available equipment",
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(top = 16.dp)
+            style = MaterialTheme.typography.labelLarge
         )
-        Equipment.entries.forEach { equipment ->
-            val selected = state.equipment.contains(equipment)
-            FilterChip(
-                selected = selected,
-                onClick = { viewModel.toggleEquipment(equipment) },
-                label = { Text(equipment.name.replace("_", " ")) },
-                modifier = Modifier.padding(end = 8.dp)
-            )
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Equipment.entries.forEach { equipment ->
+                val selected = state.equipment.contains(equipment)
+                FilterChip(
+                    selected = selected,
+                    onClick = { viewModel.toggleEquipment(equipment) },
+                    label = { Text(equipment.name.replace("_", " ")) }
+                )
+            }
         }
 
         OutlinedTextField(
             value = state.injuries,
             onValueChange = viewModel::updateInjuries,
             label = { Text("Injuries or limitations (optional)") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         PrimaryButton(
             text = "Create Plan",
             onClick = { viewModel.createPlan(onPlanCreated) },
-            modifier = Modifier.padding(top = 24.dp),
             enabled = state.equipment.isNotEmpty()
         )
     }

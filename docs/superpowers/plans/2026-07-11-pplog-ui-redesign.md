@@ -2230,26 +2230,48 @@ git commit -m "style: update PrimaryButton with rounded corners and theme colors
 
 **Files:**
 - Create: `app/src/androidTest/java/com/pplog/app/ExerciseDetailBottomSheetTest.kt`
+- Modify: `app/build.gradle.kts` (add Compose UI test dependencies if missing)
+- Modify: `gradle/libs.versions.toml` (add test library entries if missing)
+- Modify: `app/src/main/java/com/pplog/app/data/local/seed/ExerciseSeedData.kt` (remove redundant step numbering so the sheet can prefix steps)
 
 - [ ] **Step 1: Create the test file**
 
 ```kotlin
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.pplog.app
 
+import androidx.activity.ComponentActivity
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.pplog.app.data.local.dao.ExerciseDao
+import com.pplog.app.data.local.seed.ExerciseSeedData
 import com.pplog.app.ui.components.ExerciseDetailBottomSheet
 import com.pplog.app.ui.theme.PPLOGTheme
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class ExerciseDetailBottomSheetTest {
 
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun setup() {
+        val exerciseDao = org.koin.core.context.GlobalContext.get().get<ExerciseDao>()
+        runBlocking {
+            if (exerciseDao.count() == 0) {
+                exerciseDao.insertAll(ExerciseSeedData.getExercises())
+            }
+        }
+    }
 
     @Test
     fun bottomSheetDisplaysExerciseNameAndSteps() {
@@ -2257,7 +2279,8 @@ class ExerciseDetailBottomSheetTest {
             PPLOGTheme {
                 ExerciseDetailBottomSheet(
                     exerciseId = "ex_squat",
-                    onDismiss = {}
+                    onDismiss = {},
+                    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
                 )
             }
         }
@@ -2275,13 +2298,14 @@ class ExerciseDetailBottomSheetTest {
             PPLOGTheme {
                 ExerciseDetailBottomSheet(
                     exerciseId = "ex_squat",
-                    onDismiss = { dismissed = true }
+                    onDismiss = { dismissed = true },
+                    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
                 )
             }
         }
 
         composeTestRule.onNodeWithText("Close").performClick()
-        assert(dismissed)
+        assertTrue(dismissed)
     }
 }
 ```
@@ -2299,7 +2323,7 @@ Expected: tests pass.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/androidTest/java/com/pplog/app/ExerciseDetailBottomSheetTest.kt
+git add app/src/androidTest/java/com/pplog/app/ExerciseDetailBottomSheetTest.kt app/build.gradle.kts gradle/libs.versions.toml app/src/main/java/com/pplog/app/data/local/seed/ExerciseSeedData.kt
 git commit -m "test: add UI tests for exercise detail bottom sheet"
 ```
 

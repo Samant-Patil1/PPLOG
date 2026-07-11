@@ -2,10 +2,10 @@
 
 package com.pplog.app
 
+import androidx.activity.ComponentActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -14,6 +14,7 @@ import com.pplog.app.data.local.seed.ExerciseSeedData
 import com.pplog.app.ui.components.ExerciseDetailBottomSheet
 import com.pplog.app.ui.theme.PPLOGTheme
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -65,6 +66,6 @@ class ExerciseDetailBottomSheetTest {
         }
 
         composeTestRule.onNodeWithText("Close").performClick()
-        assert(dismissed)
+        assertTrue(dismissed)
     }
 }
